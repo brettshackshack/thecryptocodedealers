@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topper — Brett's AI</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: white;
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    #app {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .topper-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* TOPPER */
+
+    .topper {
+        width: 230px;
+        height: 230px;
+        background: #ffd83d;
+        border-radius: 50%;
+        position: relative;
+
+        box-shadow:
+            inset -8px -10px 0 rgba(0,0,0,0.07),
+            0 12px 25px rgba(0,0,0,0.12);
+
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Eyes */
+
+    .eye {
+        position: absolute;
+        top: 68px;
+        width: 30px;
+        height: 40px;
+        background: #222;
+        border-radius: 50%;
+    }
+
+    .eye.left {
+        left: 62px;
+    }
+
+    .eye.right {
+        right: 62px;
+    }
+
+    .eye::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 11px;
+        background: white;
+        border-radius: 50%;
+        top: 6px;
+        left: 7px;
+    }
+
+    /* Smile */
+
+    .mouth {
+        position: absolute;
+        width: 65px;
+        height: 32px;
+        left: 50%;
+        top: 125px;
+        transform: translateX(-50%);
+        border-bottom: 7px solid #222;
+        border-radius: 0 0 50px 50px;
+    }
+
+    /* Cheeks */
+
+    .cheek {
+        position: absolute;
+        width: 27px;
+        height: 14px;
+        background: #f4a6a6;
+        border-radius: 50%;
+        top: 123px;
+        opacity: 0.6;
+    }
+
+    .cheek.left {
+        left: 32px;
+    }
+
+    .cheek.right {
+        right: 32px;
+    }
+
+    /* Arms */
+
+    .arm {
+        position: absolute;
+        width: 75px;
+        height: 20px;
+        background: #ffd83d;
+        border-radius: 20px;
+        top: 135px;
+    }
+
+    .arm.left {
+        left: -60px;
+        transform: rotate(18deg);
+    }
+
+    .arm.right {
+        right: -60px;
+        transform: rotate(-18deg);
+    }
+
+    /* Hands */
+
+    .hand {
+        width: 31px;
+        height: 31px;
+        background: #ffd83d;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+    }
+
+    .arm.left .hand {
+        left: -10px;
+    }
+
+    .arm.right .hand {
+        right: -10px;
+    }
+
+    /* Legs */
+
+    .leg {
+        position: absolute;
+        width: 24px;
+        height: 65px;
+        background: #ffd83d;
+        border-radius: 20px;
+        bottom: -45px;
+    }
+
+    .leg.left {
+        left: 67px;
+        transform: rotate(7deg);
+    }
+
+    .leg.right {
+        right: 67px;
+        transform: rotate(-7deg);
+    }
+
+    /* Shoes */
+
+    .shoe {
+        position: absolute;
+        width: 55px;
+        height: 25px;
+        background: #222;
+        border-radius: 20px;
+        bottom: -5px;
+    }
+
+    .leg.left .shoe {
+        left: -20px;
+    }
+
+    .leg.right .shoe {
+        right: -20px;
+    }
+
+    /* SPEECH */
+
+    .speech {
+        margin-top: 80px;
+        text-align: center;
+        max-width: 500px;
+        padding: 0 20px;
+    }
+
+    #message {
+        font-size: 22px;
+        color: #222;
+        min-height: 32px;
+    }
+
+    /* INPUT */
+
+    #inputArea {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    #userInput {
+        width: 300px;
+        padding: 13px 16px;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    #userInput:focus {
+        border-color: #ffd83d;
+    }
+
+    #sendButton {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 50%;
+        background: #ffd83d;
+        cursor: pointer;
+        font-size: 19px;
+    }
+
+    #sendButton:hover {
+        transform: scale(1.08);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* SMALL SCREENS */
+
+    @media (max-width: 500px) {
+
+        .topper {
+            width: 190px;
+            height: 190px;
+        }
+
+        .eye {
+            top: 55px;
+            width: 25px;
+            height: 34px;
+        }
+
+        .eye.left {
+            left: 50px;
+        }
+
+        .eye.right {
+            right: 50px;
+        }
+
+        .mouth {
+            top: 105px;
+            width: 55px;
+        }
+
+        .cheek {
+            top: 104px;
+        }
+
+        .cheek.left {
+            left: 27px;
+        }
+
+        .cheek.right {
+            right: 27px;
+        }
+
+        #userInput {
+            width: 240px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div class="topper-area">
+
+        <!-- TOPPER -->
+
+        <div class="topper" id="topper">
+
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+
+            <div class="cheek left"></div>
+            <div class="cheek right"></div>
+
+            <div class="mouth"></div>
+
+            <div class="arm left">
+                <div class="hand"></div>
+            </div>
+
+            <div class="arm right">
+                <div class="hand"></div>
+            </div>
+
+            <div class="leg left">
+                <div class="shoe"></div>
+            </div>
+
+            <div class="leg right">
+                <div class="shoe"></div>
+            </div>
+
+        </div>
+
+        <!-- CONVERSATION -->
+
+        <div class="speech">
+
+            <div id="message">
+                Hi! I'm Topper, Brett's AI. What's your name?
+            </div>
+
+            <div id="inputArea">
+
+                <input
+                    id="userInput"
+                    type="text"
+                    placeholder="Type your answer..."
+                    autocomplete="off"
+                >
+
+                <button id="sendButton" onclick="submitAnswer()">
+                    ➜
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let step = 1;
+
+const message = document.getElementById("message");
+const input = document.getElementById("userInput");
+const inputArea = document.getElementById("inputArea");
+
+
+function submitAnswer() {
+
+    const answer = input.value.trim();
+
+    if (answer === "") {
+        return;
+    }
+
+    input.value = "";
+
+    /* STEP 1 — NAME */
+
+    if (step === 1) {
+
+        if (
+            answer.toLowerCase() ===
+            "anthony chase elias"
+        ) {
+
+            message.textContent =
+                "Oh! Brett must have gave you the link. Did Brett give you this link?";
+
+            step = 2;
+
+        } else {
+
+            message.textContent =
+                "Sorry, I don't recognize you.";
+
+            inputArea.classList.add("hidden");
+
+            step = 99;
+        }
+
+        return;
+    }
+
+
+    /* STEP 2 — DID BRETT GIVE THE LINK? */
+
+    if (step === 2) {
+
+        const lower = answer.toLowerCase();
+
+        if (
+            lower === "yes" ||
+            lower === "yeah" ||
+            lower === "yep" ||
+            lower === "he did" ||
+            lower.includes("brett did")
+        ) {
+
+            message.textContent =
+                "Brett is making an organisation and he wants you to be one of his first members. Would you like to be a member?";
+
+            step = 3;
+
+        } else {
+
+            message.textContent =
+                "You are not allowed here. Please leave.";
+
+            inputArea.classList.add("hidden");
+
+            step = 99;
+        }
+
+        return;
+    }
+
+
+    /* STEP 3 — MEMBERSHIP */
+
+    if (step === 3) {
+
+        const lower = answer.toLowerCase();
+
+        if (
+            lower === "yes" ||
+            lower === "yeah" ||
+            lower === "yep" ||
+            lower.includes("yes")
+        ) {
+
+            const code = generateCode();
+
+            message.innerHTML =
+                "Welcome to the Crypto Codes Dealers Club!<br><br>" +
+                "<strong>Your member code is: " +
+                code +
+                "</strong><br><br>" +
+                "Show this code to Brett.";
+
+            inputArea.classList.add("hidden");
+
+            step = 99;
+
+        } else {
+
+            message.textContent =
+                "That's okay. Maybe another time!";
+
+            inputArea.classList.add("hidden");
+
+            step = 99;
+        }
+
+        return;
+    }
+
+}
+
+
+/* RANDOM MEMBER CODE */
+
+function generateCode() {
+
+    const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const numbers = "23456789";
+
+    let code = "";
+
+    for (let i = 0; i < 4; i++) {
+        code += letters[
+            Math.floor(Math.random() * letters.length)
+        ];
+    }
+
+    code += "-";
+
+    for (let i = 0; i < 4; i++) {
+        code += numbers[
+            Math.floor(Math.random() * numbers.length)
+        ];
+    }
+
+    return code;
+}
+
+
+/* ENTER KEY */
+
+input.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        submitAnswer();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
